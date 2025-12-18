@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.yearup.data.CategoryDao;
 import org.yearup.data.ProductDao;
+import org.yearup.data.mysql.MySqlCategoryDao;
 import org.yearup.models.Category;
 import org.yearup.models.Product;
 
@@ -51,12 +52,13 @@ public class CategoriesController
     @PreAuthorize("permitAll()")
     public Category getById(@PathVariable int id)
     {
-        // get the category by id
-        try {
-            return categoryDao.getById(id);
-        } catch (Exception exception) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
+        Category category = categoryDao.getById(id);
+
+        if (category == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+
+        return category;
     }
 
     // the url to return all products in category 1 would look like this
