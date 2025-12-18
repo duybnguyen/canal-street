@@ -1,5 +1,6 @@
 package org.yearup.data.mysql;
 
+import com.mysql.cj.protocol.Resultset;
 import org.springframework.stereotype.Component;
 import org.yearup.data.CategoryDao;
 import org.yearup.models.Category;
@@ -45,6 +46,18 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
     public Category getById(int categoryId)
     {
         // get category by id
+        String sql = "SELECT * WHERE category_id = ?";
+        try (Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, categoryId);
+            ResultSet row = statement.executeQuery();
+            if (row.next()) {
+                return mapRow(row);
+            }
+
+        } catch (SQLException exception) {
+            throw new RuntimeException(exception);
+        }
         return null;
     }
 
