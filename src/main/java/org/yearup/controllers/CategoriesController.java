@@ -67,7 +67,11 @@ public class CategoriesController
     public List<Product> getProductsById(@PathVariable int categoryId)
     {
         // get a list of product by categoryId
-        return null;
+        try {
+            return productDao.listByCategoryId(categoryId);
+        } catch (Exception exception) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
+        }
     }
 
     // add annotation to call this method for a POST action
