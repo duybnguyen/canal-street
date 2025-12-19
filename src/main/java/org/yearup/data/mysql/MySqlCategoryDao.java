@@ -1,8 +1,11 @@
 package org.yearup.data.mysql;
 
 import com.mysql.cj.protocol.Resultset;
+import org.apache.ibatis.jdbc.SQL;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 import org.yearup.data.CategoryDao;
 import org.yearup.models.Category;
 
@@ -105,10 +108,22 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
     }
 
     @Override
-    public void delete(int categoryId)
-    {
-        // delete category
+    public void delete(int categoryId) {
+        String sql = "DELETE FROM categories WHERE category_id = ?";
+
+        try (Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, categoryId);
+
+            int rows = statement.executeUpdate();
+            if (rows == 0) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
+
 
     private Category mapRow(ResultSet row) throws SQLException
     {
