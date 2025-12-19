@@ -37,8 +37,8 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
                 Category category = mapRow(row);
                 categories.add(category);
             }
-        } catch (SQLException exception) {
-            throw new RuntimeException(exception);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return categories;
     }
@@ -56,8 +56,8 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
                 return mapRow(row);
             }
 
-        } catch (SQLException exception) {
-            throw new RuntimeException(exception);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return null;
     }
@@ -92,6 +92,16 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
     public void update(int categoryId, Category category)
     {
         // update category
+        String sql = "UPDATE categories SET name = ?, description = ? WHERE category_id = ?";
+        try (Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, category.getName());
+            statement.setString(2, category.getDescription());
+            statement.setInt(3, categoryId);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
