@@ -6,6 +6,10 @@ The API supports role-based access control, allowing administrators to create, u
 
 This project demonstrates backend development concepts such as REST API design, database interaction with DAOs, authentication and authorization, and separation of concerns using layered architecture.
 
+## User Stories
+- As an admin, I want product updates to actually update the existing product (not insert a new one), so the catalog doesn’t show duplicates.
+- As an admin, I want to create/update/delete categories so the clothing store stays organized.
+- As a shopper, I want to filter products (category, price range, subCategory like “red”, etc.) so I can narrow down clothing quickly.
 
 ### Prerequisites
 
